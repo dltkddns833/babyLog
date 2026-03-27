@@ -283,7 +283,8 @@ body {
 
 .animate-expand {
   animation: expandDown 0.3s ease-out forwards;
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
 }
 
 /* Gradient shimmer for section titles */
