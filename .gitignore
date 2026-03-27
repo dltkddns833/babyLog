@@ -38,6 +38,7 @@ yarn-error.log*
 
 # baby data (raw zip exports)
 /zip/
+/docs/
 
 # typescript
 *.tsbuildinfo

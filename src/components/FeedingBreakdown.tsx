@@ -41,12 +41,12 @@ export default function FeedingBreakdown({ data }: Props) {
   return (
     <div className="bg-white rounded-xl border border-gray-200 p-3 sm:p-5">
       <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">좌/우 수유 비율</h3>
-      <ResponsiveContainer width="100%" height={220} className="sm:!h-[250px]">
-        <PieChart>
+      <ResponsiveContainer width="100%" height={260} className="sm:!h-[280px]">
+        <PieChart margin={{ top: 20, right: 20, left: 20, bottom: 10 }}>
           <Pie
             data={pieData}
             cx="50%"
-            cy="50%"
+            cy="48%"
             innerRadius={50}
             outerRadius={75}
             dataKey="value"
