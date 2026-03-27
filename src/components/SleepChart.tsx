@@ -27,23 +27,25 @@ export default function SleepChart({ data }: Props) {
 
   if (chartData.length === 0) {
     return (
-      <div className="bg-white rounded-xl border border-gray-200 p-5">
-        <h3 className="text-lg font-semibold mb-4">수면 패턴</h3>
-        <p className="text-gray-400 text-center py-8">수면 기록이 없습니다</p>
+      <div className="bg-white rounded-xl border border-gray-200 p-3 sm:p-5">
+        <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">수면 패턴</h3>
+        <p className="text-gray-400 text-center py-6 sm:py-8 text-sm">수면 기록이 없습니다</p>
       </div>
     );
   }
 
+  const interval = chartData.length > 15 ? Math.floor(chartData.length / 8) : 0;
+
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-5">
-      <h3 className="text-lg font-semibold mb-4">수면 패턴</h3>
-      <ResponsiveContainer width="100%" height={300}>
-        <BarChart data={chartData}>
+    <div className="bg-white rounded-xl border border-gray-200 p-3 sm:p-5">
+      <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">수면 패턴</h3>
+      <ResponsiveContainer width="100%" height={220} className="sm:!h-[300px]">
+        <BarChart data={chartData} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="date" tick={{ fontSize: 11 }} />
-          <YAxis />
+          <XAxis dataKey="date" tick={{ fontSize: 10 }} interval={interval} />
+          <YAxis tick={{ fontSize: 10 }} width={30} />
           <Tooltip />
-          <Legend />
+          <Legend wrapperStyle={{ fontSize: 12 }} />
           <Bar
             dataKey="밤잠(시간)"
             fill="#6366f1"

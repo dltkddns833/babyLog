@@ -22,11 +22,11 @@ export default function StatCard({
 
   return (
     <div
-      className={`rounded-xl border p-5 ${colorMap[color] || colorMap.indigo}`}
+      className={`rounded-xl border p-3 sm:p-5 ${colorMap[color] || colorMap.indigo}`}
     >
-      <p className="text-sm text-gray-500 mb-1">{title}</p>
-      <p className="text-2xl font-bold">{value}</p>
-      {sub && <p className="text-xs text-gray-400 mt-1">{sub}</p>}
+      <p className="text-xs sm:text-sm text-gray-500 mb-0.5 sm:mb-1">{title}</p>
+      <p className="text-xl sm:text-2xl font-bold">{value}</p>
+      {sub && <p className="text-[10px] sm:text-xs text-gray-400 mt-0.5 sm:mt-1">{sub}</p>}
     </div>
   );
 }

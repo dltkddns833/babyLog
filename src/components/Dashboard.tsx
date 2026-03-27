@@ -45,7 +45,7 @@ export default function Dashboard({ allData }: Props) {
   const avgFeedingMin = days > 0 ? Math.round(totalFeedingMin / days) : 0;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       <MonthSelector
         months={allData.map((d) => ({ month: d.month, label: d.label }))}
         selected={selectedMonth}
@@ -53,7 +53,7 @@ export default function Dashboard({ allData }: Props) {
       />
 
       {/* Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4">
         <StatCard
           title="일평균 수유 횟수"
           value={avgFeedings}
@@ -113,7 +113,7 @@ export default function Dashboard({ allData }: Props) {
       {/* Charts */}
       <DailySummaryChart data={dailySummaries} />
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
         <SleepChart data={dailySummaries} />
         <FeedingBreakdown data={dailySummaries} />
       </div>
