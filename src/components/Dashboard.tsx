@@ -7,11 +7,11 @@ import StatCard from "./StatCard";
 import DailySummaryChart from "./DailySummaryChart";
 import FeedingIntervalChart from "./FeedingIntervalChart";
 import AvgFeedingDurationChart from "./AvgFeedingDurationChart";
-import DayNightChart from "./DayNightChart";
 import FeedingHeatmap from "./FeedingHeatmap";
 import FeedingBreakdown from "./FeedingBreakdown";
 import SleepChart from "./SleepChart";
 import DiaperChart from "./DiaperChart";
+import FeedingTable from "./FeedingTable";
 
 interface Props {
   allData: MonthlyData[];
@@ -114,22 +114,30 @@ export default function Dashboard({ allData }: Props) {
         )}
       </div>
 
-      {/* 수유 차트 */}
+      {/* 2. 일별 수유 요약 테이블 */}
+      <FeedingTable data={dailySummaries} activities={current.activities} />
+
+      {/* 3. 일별 수유 횟수 */}
       <DailySummaryChart data={dailySummaries} />
+
+      {/* 4. 수유 간격 추이 */}
       <FeedingIntervalChart data={dailySummaries} />
+
+      {/* 5. 1회 평균 수유 시간 */}
       <AvgFeedingDurationChart data={dailySummaries} />
 
+      {/* 6. 시간대 수유 빈도 | 좌/우 비율 */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
-        <DayNightChart data={dailySummaries} />
         <FeedingHeatmap data={dailySummaries} />
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
         <FeedingBreakdown data={dailySummaries} />
-        <SleepChart data={dailySummaries} />
       </div>
 
+      {/* 7. 수면 패턴 */}
+      <SleepChart data={dailySummaries} />
+
+      {/* 8. 기저귀 */}
       <DiaperChart data={dailySummaries} />
+
     </div>
   );
 }

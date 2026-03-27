@@ -11,21 +11,40 @@ export default function MonthSelector({
   selected,
   onSelect,
 }: MonthSelectorProps) {
+  const current = months.find((m) => m.month === selected);
+  const currentIdx = months.findIndex((m) => m.month === selected);
+  const hasPrev = currentIdx > 0;
+  const hasNext = currentIdx < months.length - 1;
+
   return (
-    <div className="flex gap-2 flex-wrap overflow-x-auto pb-1 -mx-1 px-1">
-      {months.map((m) => (
-        <button
-          key={m.month}
-          onClick={() => onSelect(m.month)}
-          className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors whitespace-nowrap ${
-            selected === m.month
-              ? "bg-indigo-600 text-white"
-              : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200"
-          }`}
-        >
-          {m.label}
-        </button>
-      ))}
+    <div className="flex items-center gap-2">
+      <button
+        onClick={() => hasPrev && onSelect(months[currentIdx - 1].month)}
+        disabled={!hasPrev}
+        className="p-2 rounded-lg border border-gray-200 bg-white text-gray-600 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
+      >
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 12L6 8L10 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+      </button>
+
+      <select
+        value={selected}
+        onChange={(e) => onSelect(e.target.value)}
+        className="flex-1 px-3 py-2 rounded-lg border border-gray-200 bg-white text-sm sm:text-base font-medium text-center appearance-none cursor-pointer hover:bg-gray-50 transition-colors"
+      >
+        {months.map((m) => (
+          <option key={m.month} value={m.month}>
+            {m.label}
+          </option>
+        ))}
+      </select>
+
+      <button
+        onClick={() => hasNext && onSelect(months[currentIdx + 1].month)}
+        disabled={!hasNext}
+        className="p-2 rounded-lg border border-gray-200 bg-white text-gray-600 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
+      >
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4L10 8L6 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+      </button>
     </div>
   );
 }

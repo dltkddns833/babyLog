@@ -72,6 +72,22 @@ export interface DailySummary {
   dayFeedingCount: number; // 낮 수유 (6~22시)
   nightFeedingCount: number; // 밤 수유 (22~6시)
   feedingHours: number[]; // 수유가 발생한 시간대 (0~23)
+  bottleSummary: string; // 젖병 보충 요약 (예: "유축 80ml")
+  memos: string[]; // 해당 일의 메모 목록
+}
+
+export interface BottleRecord {
+  date: string;
+  time: string; // HH:MM
+  type: "formula" | "pumped";
+  typeLabel: string;
+  amountMl: number;
+}
+
+export interface NotableEvent {
+  date: string;
+  category: string;
+  content: string;
 }
 
 export interface MonthlyData {
@@ -79,6 +95,8 @@ export interface MonthlyData {
   label: string; // e.g. "2026년 2월"
   activities: Activity[];
   dailySummaries: DailySummary[];
+  bottleRecords: BottleRecord[];
+  notableEvents: NotableEvent[];
 }
 
 // --- Parsing ---
@@ -233,9 +251,12 @@ function buildDailySummaries(activities: Activity[]): DailySummary[] {
       dayFeedingCount: 0,
       nightFeedingCount: 0,
       feedingHours: [],
+      bottleSummary: "-",
+      memos: [],
     };
 
     const feedingTimes: Date[] = [];
+    const bottleParts: string[] = [];
 
     for (const a of acts) {
       const isFeeding =
@@ -281,7 +302,14 @@ function buildDailySummaries(activities: Activity[]): DailySummary[] {
           summary.nightFeedingCount++;
         }
       }
+
+      if (a.memo) {
+        summary.memos.push(a.memo);
+      }
     }
+
+    const totalBottleMl = summary.formulaMl + summary.pumpedMl;
+    summary.bottleSummary = totalBottleMl > 0 ? `${totalBottleMl}ml` : "-";
 
     const totalAllFeedings = summary.feedingCount + summary.formulaCount + summary.pumpedCount;
     summary.avgFeedingDuration =
@@ -350,11 +378,53 @@ export function loadAllData(): MonthlyData[] {
     const mon = parseInt(month.substring(4, 6));
     const label = `${year}년 ${mon}월`;
 
+    // 젖병 수유 내역
+    const bottleRecords: BottleRecord[] = activities
+      .filter((a): a is FormulaActivity | PumpedActivity =>
+        a.type === "formula" || a.type === "pumped"
+      )
+      .map((a) => ({
+        date: getDateFromISO(a.startTime),
+        time: a.startTime.substring(11, 16),
+        type: a.type,
+        typeLabel: a.type === "formula" ? "분유" : "유축모유",
+        amountMl: a.amountMl,
+      }));
+
+    // 특이사항 (메모에서 추출)
+    const notableEvents: NotableEvent[] = [];
+    const memoKeywords: Record<string, string> = {
+      "보호기": "보호기",
+      "클러스터": "클러스터 피딩",
+      "눕수": "눕혀수유",
+      "젖물잠": "젖물잠",
+      "테러": "대변 테러",
+      "폭탄": "대변 테러",
+    };
+
+    for (const a of activities) {
+      if (!a.memo) continue;
+      let category = "기타";
+      for (const [keyword, cat] of Object.entries(memoKeywords)) {
+        if (a.memo.includes(keyword)) {
+          category = cat;
+          break;
+        }
+      }
+      notableEvents.push({
+        date: getDateFromISO(a.startTime),
+        category,
+        content: a.memo,
+      });
+    }
+
     result.push({
       month,
       label,
       activities,
       dailySummaries: buildDailySummaries(activities),
+      bottleRecords,
+      notableEvents,
     });
   }
 

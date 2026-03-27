@@ -39,7 +39,7 @@ export default function AvgFeedingDurationChart({ data }: Props) {
         <LineChart data={chartData} margin={{ top: 10, right: 10, left: 5, bottom: 10 }}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="date" tick={{ fontSize: 10 }} interval={interval} />
-          <YAxis tick={{ fontSize: 10 }} width={35} />
+          <YAxis tick={{ fontSize: 10 }} width={35} domain={["dataMin - 5", "dataMax + 5"]} />
           <Tooltip />
           <ReferenceLine y={avg} stroke="#94a3b8" strokeDasharray="4 4" label={{ value: "평균", fontSize: 10, fill: "#94a3b8" }} />
           <Line

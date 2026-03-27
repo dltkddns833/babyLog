@@ -30,7 +30,7 @@ export default function DailySummaryChart({ data }: Props) {
         <LineChart data={chartData} margin={{ top: 10, right: 10, left: 5, bottom: 10 }}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="date" tick={{ fontSize: 10 }} interval={interval} />
-          <YAxis tick={{ fontSize: 10 }} width={35} allowDecimals={false} />
+          <YAxis tick={{ fontSize: 10 }} width={35} allowDecimals={false} domain={["dataMin - 1", "dataMax + 1"]} />
           <Tooltip />
           <Line
             type="monotone"

@@ -37,21 +37,20 @@ pnpm lint         # ESLint
 BabyTime 앱 내보내기 txt 파일. `====================` 구분자로 레코드 분리.
 활동 유형 8종: 모유(양쪽/왼쪽/오른쪽), 분유, 유축수유, 기저귀, 밤잠, 낮잠.
 
-## Dashboard Components
+## Dashboard Layout (순서)
 
-수유 관련 (핵심):
-- `DailySummaryChart` — 일별 수유 횟수 라인 차트
-- `FeedingIntervalChart` — 일별 평균 수유 간격 추이 (평균 기준선 포함)
-- `AvgFeedingDurationChart` — 1회 평균 수유 시간 추이 (평균 기준선 포함)
-- `DayNightChart` — 낮(6~22시)/밤(22~6시) 수유 비율 스택 바 차트
-- `FeedingHeatmap` — 0~23시 시간대별 수유 빈도 히트맵
-- `FeedingBreakdown` — 좌/우 수유 비율 도넛 차트
+1. **통계 카드** — 일평균 수유 횟수/시간, 기저귀, 수면 등 요약
+2. **일별 수유 요약** (`FeedingTable`) — 테이블 + 행 클릭 시 디테일 펼침 (개별 활동 시간/종류/메모 표시)
+3. **일별 수유 횟수** (`DailySummaryChart`) — 라인 차트
+4. **수유 간격 추이** (`FeedingIntervalChart`) — 라인 차트, 평균 기준선 포함
+5. **1회 평균 수유 시간** (`AvgFeedingDurationChart`) — 라인 차트, 평균 기준선 포함
+6. **시간대 수유 빈도** (`FeedingHeatmap`) + **좌/우 비율** (`FeedingBreakdown`) — 2열 그리드
+7. **수면 패턴** (`SleepChart`) — 밤잠/낮잠 스택 바 차트
+8. **기저귀** (`DiaperChart`) — 일별 교체 횟수 바 차트
 
 기타:
-- `SleepChart` — 밤잠/낮잠 시간 스택 바 차트
-- `DiaperChart` — 일별 기저귀 교체 횟수 바 차트
 - `StatCard` — 요약 통계 카드
-- `MonthSelector` — 월별 선택 버튼
+- `MonthSelector` — 좌/우 화살표 + 드롭다운 셀렉트 (월 수 증가에 대응)
 
 ## Adding New Month Data
 
@@ -62,9 +61,11 @@ BabyTime 앱 내보내기 txt 파일. `====================` 구분자로 레코
 ## Design Decisions
 
 - 모바일 우선 반응형 (sm: breakpoint로 데스크톱 확대)
-- 일별 수유 차트는 라인 차트 사용 (바 차트는 모바일에서 가독성 떨어짐)
+- 라인 차트 Y축 domain을 dataMin/dataMax 기반으로 설정 (0부터 시작하지 않음)
 - 차트 margin `{ top: 10, right: 10, left: 5, bottom: 10 }`, Y축 width 35 (라벨 잘림 방지)
 - 수유 횟수가 수유 시간보다 중요한 지표로 취급
+- FeedingTable: 모바일에서 생후/간격 컬럼 숨김, 디테일만 가로스크롤 허용
+- 유축/분유 ml은 합산 표시
 
 ## 작업 규칙
 

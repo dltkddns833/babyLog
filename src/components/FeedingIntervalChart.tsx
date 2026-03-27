@@ -39,7 +39,7 @@ export default function FeedingIntervalChart({ data }: Props) {
         <LineChart data={chartData} margin={{ top: 10, right: 10, left: 5, bottom: 10 }}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="date" tick={{ fontSize: 10 }} interval={interval} />
-          <YAxis tick={{ fontSize: 10 }} width={35} />
+          <YAxis tick={{ fontSize: 10 }} width={35} domain={["dataMin - 20", "dataMax + 20"]} />
           <Tooltip
             formatter={(value: number) => [
               `${Math.floor(value / 60)}시간 ${value % 60}분`,
