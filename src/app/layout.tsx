@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "BabyLog - 성찬이 육아 대시보드",
-  description: "BabyTime 데이터 시각화 대시보드",
+  title: "찬찬기록 - 성찬이 육아 대시보드",
+  description: "성찬이의 수유·수면·기저귀 기록 대시보드",
 };
 
 export default function RootLayout({
@@ -15,8 +15,11 @@ export default function RootLayout({
     <html lang="ko">
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet" />
       </head>
-      <body className="bg-gray-50 text-gray-900 antialiased">{children}</body>
+      <body className="text-gray-800 antialiased" style={{ fontFamily: "'Noto Sans KR', sans-serif" }}>{children}</body>
     </html>
   );
 }

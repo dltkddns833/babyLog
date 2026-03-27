@@ -17,7 +17,7 @@ interface Props {
   insights?: Insight[];
 }
 
-const COLORS = ["#818cf8", "#f472b6"];
+const COLORS = ["#a78bfa", "#f9a8d4"];
 
 export default function FeedingBreakdown({ data, insights }: Props) {
   const totalLeft = data.reduce((s, d) => s + d.leftMinutes, 0);
@@ -30,8 +30,11 @@ export default function FeedingBreakdown({ data, insights }: Props) {
 
   if (totalLeft === 0 && totalRight === 0) {
     return (
-      <div className="bg-white rounded-xl border border-gray-200 p-3 sm:p-5">
-        <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">좌/우 수유 비율</h3>
+      <div className="card p-3.5 sm:p-5">
+        <div className="flex items-center gap-2 mb-3 sm:mb-4">
+          <span className="text-base">⚖️</span>
+          <h3 className="section-title text-base sm:text-lg font-semibold text-gray-800">좌/우 수유 비율</h3>
+        </div>
         <p className="text-gray-400 text-center py-6 sm:py-8 text-sm">데이터 없음</p>
       </div>
     );
@@ -42,8 +45,11 @@ export default function FeedingBreakdown({ data, insights }: Props) {
   const rightPct = 100 - leftPct;
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-3 sm:p-5">
-      <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">좌/우 수유 비율</h3>
+    <div className="card p-3.5 sm:p-5">
+      <div className="flex items-center gap-2 mb-3 sm:mb-4">
+        <span className="text-base">⚖️</span>
+        <h3 className="section-title text-base sm:text-lg font-semibold text-gray-800">좌/우 수유 비율</h3>
+      </div>
       <ResponsiveContainer width="100%" height={260} className="sm:!h-[280px]">
         <PieChart margin={{ top: 20, right: 20, left: 20, bottom: 10 }}>
           <Pie
@@ -60,13 +66,20 @@ export default function FeedingBreakdown({ data, insights }: Props) {
               <Cell key={index} fill={COLORS[index]} />
             ))}
           </Pie>
-          <Tooltip />
+          <Tooltip contentStyle={{ background: "rgba(255,255,255,0.95)", border: "1px solid rgba(0,0,0,0.06)", borderRadius: "12px", boxShadow: "0 4px 16px rgba(0,0,0,0.08)" }} />
           <Legend wrapperStyle={{ fontSize: 12 }} />
         </PieChart>
       </ResponsiveContainer>
-      <p className="text-center text-xs sm:text-sm text-gray-500 mt-1 sm:mt-2">
-        왼쪽 {leftPct}% / 오른쪽 {rightPct}%
-      </p>
+      <div className="flex items-center justify-center gap-4 mt-1 sm:mt-2">
+        <div className="flex items-center gap-1.5">
+          <div className="w-3 h-3 rounded-full" style={{ background: COLORS[0] }} />
+          <span className="text-xs sm:text-sm text-gray-500 font-medium">왼쪽 {leftPct}%</span>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <div className="w-3 h-3 rounded-full" style={{ background: COLORS[1] }} />
+          <span className="text-xs sm:text-sm text-gray-500 font-medium">오른쪽 {rightPct}%</span>
+        </div>
+      </div>
       {insights && <InsightBox insights={insights} />}
     </div>
   );

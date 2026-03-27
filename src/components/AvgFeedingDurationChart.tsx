@@ -35,23 +35,32 @@ export default function AvgFeedingDurationChart({ data, insights }: Props) {
   const interval = chartData.length > 15 ? Math.floor(chartData.length / 7) : 0;
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-3 sm:p-5">
-      <h3 className="text-base sm:text-lg font-semibold mb-1 sm:mb-2">1회 평균 수유 시간</h3>
-      <p className="text-xs text-gray-400 mb-3">전체 평균 {avg}분</p>
+    <div className="card p-3.5 sm:p-5">
+      <div className="flex items-center gap-2 mb-1 sm:mb-2">
+        <span className="text-base">🕐</span>
+        <h3 className="section-title text-base sm:text-lg font-semibold text-gray-800">1회 평균 수유 시간</h3>
+      </div>
+      <p className="text-xs text-gray-400 mb-3 ml-7">전체 평균 {avg}분</p>
       <ResponsiveContainer width="100%" height={220} className="sm:!h-[280px]">
         <LineChart data={chartData} margin={{ top: 10, right: 10, left: 5, bottom: 10 }}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="date" tick={{ fontSize: 10 }} interval={interval} />
-          <YAxis tick={{ fontSize: 10 }} width={35} domain={["dataMin - 5", "dataMax + 5"]} />
-          <Tooltip />
-          <ReferenceLine y={avg} stroke="#94a3b8" strokeDasharray="4 4" label={{ value: "평균", fontSize: 10, fill: "#94a3b8" }} />
+          <defs>
+            <linearGradient id="lineGradient3" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stopColor="#6ee7b7" />
+              <stop offset="100%" stopColor="#34d399" />
+            </linearGradient>
+          </defs>
+          <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.04)" />
+          <XAxis dataKey="date" tick={{ fontSize: 10, fill: "#9ca3af" }} interval={interval} axisLine={{ stroke: "rgba(0,0,0,0.06)" }} tickLine={false} />
+          <YAxis tick={{ fontSize: 10, fill: "#9ca3af" }} width={35} domain={["dataMin - 5", "dataMax + 5"]} axisLine={false} tickLine={false} />
+          <Tooltip contentStyle={{ background: "rgba(255,255,255,0.95)", border: "1px solid rgba(0,0,0,0.06)", borderRadius: "12px", boxShadow: "0 4px 16px rgba(0,0,0,0.08)" }} />
+          <ReferenceLine y={avg} stroke="#a7f3d0" strokeDasharray="6 4" label={{ value: "평균", fontSize: 10, fill: "#6ee7b7" }} />
           <Line
             type="monotone"
             dataKey="평균 수유 시간(분)"
-            stroke="#34d399"
-            strokeWidth={2}
-            dot={{ r: 3 }}
-            activeDot={{ r: 5 }}
+            stroke="url(#lineGradient3)"
+            strokeWidth={2.5}
+            dot={{ r: 3, fill: "#6ee7b7", strokeWidth: 0 }}
+            activeDot={{ r: 5, fill: "#10b981", strokeWidth: 2, stroke: "#fff" }}
           />
         </LineChart>
       </ResponsiveContainer>

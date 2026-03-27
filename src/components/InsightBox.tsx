@@ -7,15 +7,15 @@ interface Props {
 }
 
 const icons: Record<string, string> = {
-  positive: "✅",
+  positive: "🌟",
   neutral: "💡",
-  watch: "⚠️",
+  watch: "🔔",
 };
 
 const colors: Record<string, string> = {
-  positive: "bg-emerald-50 border-emerald-200 text-emerald-800",
-  neutral: "bg-blue-50 border-blue-200 text-blue-800",
-  watch: "bg-amber-50 border-amber-200 text-amber-800",
+  positive: "bg-emerald-50/80 text-emerald-700",
+  neutral: "bg-sky-50/80 text-sky-700",
+  watch: "bg-amber-50/80 text-amber-700",
 };
 
 export default function InsightBox({ insights }: Props) {
@@ -26,7 +26,7 @@ export default function InsightBox({ insights }: Props) {
       {insights.map((insight, i) => (
         <div
           key={i}
-          className={`flex items-start gap-2 px-3 py-2 rounded-lg border text-xs sm:text-sm ${colors[insight.type]}`}
+          className={`insight-badge flex items-start gap-2 px-3.5 py-2.5 text-xs sm:text-sm leading-relaxed ${colors[insight.type]}`}
         >
           <span className="shrink-0 text-sm">{icons[insight.type]}</span>
           <span>{insight.text}</span>

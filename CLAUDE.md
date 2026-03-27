@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-BabyTime 앱에서 내보낸 아기(성찬) 활동 데이터를 시각화하는 Next.js 웹 대시보드.
+**찬찬기록** — BabyTime 앱에서 내보낸 아기(성찬) 활동 데이터를 시각화하는 Next.js 웹 대시보드.
 모바일 환경에서 주로 사용하며, 수유 데이터가 가장 중요한 지표다.
 
 - **아기**: 이성찬 (2026년 1월 27일생, 남, 출생 체중 3,810g)
@@ -50,9 +50,11 @@ BabyTime 앱 내보내기 txt 파일. `====================` 구분자로 레코
 8. **기저귀** (`DiaperChart`) — 일별 교체 횟수 바 차트 + 인사이트
 
 기타:
-- `StatCard` — 요약 통계 카드
-- `MonthSelector` — 좌/우 화살표 + 드롭다운 셀렉트 (월 수 증가에 대응)
+- `StatCard` — 요약 통계 카드 (컬러별 아이콘, 상단 그라데이션 액센트)
+- `MonthSelector` — 좌/우 화살표 + 드롭다운 셀렉트 (pill 스타일)
 - `InsightBox` — 인사이트 표시 컴포넌트 (positive/neutral/watch 3단계)
+- `AnimatedSection` — 스크롤 시 fade-in-up 애니메이션 래퍼
+- `HeartEasterEgg` — 성찬이 사진 클릭 시 하트 burst 이스터에그
 
 ## Insight System
 
@@ -74,7 +76,18 @@ BabyTime 앱 내보내기 txt 파일. `====================` 구분자로 레코
 3. Claude에게 해당 월 종합 인사이트 분석 요청 → `data/insights.json` 업데이트
 4. `pnpm build`로 재빌드 (parser가 자동으로 새 월 탐지)
 
-## Design Decisions
+## Design System
+
+- **테마**: 아기자기한 파스텔 톤, 글라스모피즘 카드, 부드러운 그림자
+- **배경**: 핑크/블루/라벤더 그라데이션 (`globals.css`)
+- **폰트**: Noto Sans KR (Google Fonts)
+- **카드**: `.card` (글라스 효과), `.stat-card` (상단 컬러 액센트), 호버 시 lift-up
+- **색상 체계**: indigo(수유), pink(시간), amber(기저귀), emerald(낮잠), blue(밤잠), purple(분유/유축)
+- **애니메이션**: 스크롤 fade-in-up (`AnimatedSection`), StatCard pop-in stagger, 헤더 slide-in + 아이콘 float, 테이블 행 expand, 히트맵 바 grow, 섹션 타이틀 shimmer
+- **이스터에그**: 헤더 성찬이 사진 클릭 시 화면 전체에 하트 burst (`HeartEasterEgg`, `createPortal` 사용)
+- **앱 아이콘**: `src/app/icon.tsx` (동적 생성, 글라스 + 아기 얼굴), `public/baby.jpg` (헤더 프로필)
+
+### 기존 Design Decisions
 
 - 모바일 우선 반응형 (sm: breakpoint로 데스크톱 확대)
 - 라인 차트 Y축 domain을 dataMin/dataMax 기반으로 설정 (0부터 시작하지 않음)
@@ -82,6 +95,7 @@ BabyTime 앱 내보내기 txt 파일. `====================` 구분자로 레코
 - 수유 횟수가 수유 시간보다 중요한 지표로 취급
 - FeedingTable: 모바일에서 생후/간격 컬럼 숨김, 디테일만 가로스크롤 허용
 - 유축/분유 ml은 합산 표시
+- MonthlySummary: `[제목]` 패턴 자동 파싱 (굵게 + 줄바꿈), ①②③ 번호/문장 단위 자동 줄바꿈, 아이콘은 모바일 숨김(`hidden sm:block`)
 
 ## 작업 규칙
 

@@ -5,28 +5,29 @@ interface StatCardProps {
   color?: string;
 }
 
+const iconMap: Record<string, string> = {
+  indigo: "🍼",
+  pink: "⏱",
+  amber: "🧷",
+  emerald: "😴",
+  blue: "🌙",
+  purple: "🧴",
+};
+
 export default function StatCard({
   title,
   value,
   sub,
   color = "indigo",
 }: StatCardProps) {
-  const colorMap: Record<string, string> = {
-    indigo: "border-indigo-200 bg-indigo-50",
-    pink: "border-pink-200 bg-pink-50",
-    amber: "border-amber-200 bg-amber-50",
-    emerald: "border-emerald-200 bg-emerald-50",
-    blue: "border-blue-200 bg-blue-50",
-    purple: "border-purple-200 bg-purple-50",
-  };
-
   return (
-    <div
-      className={`rounded-xl border p-3 sm:p-5 ${colorMap[color] || colorMap.indigo}`}
-    >
-      <p className="text-xs sm:text-sm text-gray-500 mb-0.5 sm:mb-1">{title}</p>
-      <p className="text-xl sm:text-2xl font-bold">{value}</p>
-      {sub && <p className="text-[10px] sm:text-xs text-gray-400 mt-0.5 sm:mt-1">{sub}</p>}
+    <div className={`stat-card stat-card-${color} p-3.5 sm:p-5`}>
+      <div className="flex items-center gap-1.5 mb-1.5 sm:mb-2">
+        <span className="text-sm">{iconMap[color] || "📊"}</span>
+        <p className="text-[11px] sm:text-xs text-gray-400 font-medium tracking-wide">{title}</p>
+      </div>
+      <p className="text-xl sm:text-2xl font-bold text-gray-800">{value}</p>
+      {sub && <p className="text-[10px] sm:text-xs text-gray-400 mt-1 sm:mt-1.5">{sub}</p>}
     </div>
   );
 }

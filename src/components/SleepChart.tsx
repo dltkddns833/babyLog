@@ -30,8 +30,11 @@ export default function SleepChart({ data, insights }: Props) {
 
   if (chartData.length === 0) {
     return (
-      <div className="bg-white rounded-xl border border-gray-200 p-3 sm:p-5">
-        <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">수면 패턴</h3>
+      <div className="card p-3.5 sm:p-5">
+        <div className="flex items-center gap-2 mb-3 sm:mb-4">
+          <span className="text-base">😴</span>
+          <h3 className="section-title text-base sm:text-lg font-semibold text-gray-800">수면 패턴</h3>
+        </div>
         <p className="text-gray-400 text-center py-6 sm:py-8 text-sm">수면 기록이 없습니다</p>
       </div>
     );
@@ -40,18 +43,21 @@ export default function SleepChart({ data, insights }: Props) {
   const interval = chartData.length > 15 ? Math.floor(chartData.length / 8) : 0;
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-3 sm:p-5">
-      <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">수면 패턴</h3>
+    <div className="card p-3.5 sm:p-5">
+      <div className="flex items-center gap-2 mb-3 sm:mb-4">
+        <span className="text-base">😴</span>
+        <h3 className="section-title text-base sm:text-lg font-semibold text-gray-800">수면 패턴</h3>
+      </div>
       <ResponsiveContainer width="100%" height={220} className="sm:!h-[300px]">
         <BarChart data={chartData} margin={{ top: 10, right: 10, left: 5, bottom: 10 }}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="date" tick={{ fontSize: 10 }} interval={interval} />
-          <YAxis tick={{ fontSize: 10 }} width={35} />
-          <Tooltip />
+          <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.04)" />
+          <XAxis dataKey="date" tick={{ fontSize: 10, fill: "#9ca3af" }} interval={interval} axisLine={{ stroke: "rgba(0,0,0,0.06)" }} tickLine={false} />
+          <YAxis tick={{ fontSize: 10, fill: "#9ca3af" }} width={35} axisLine={false} tickLine={false} />
+          <Tooltip contentStyle={{ background: "rgba(255,255,255,0.95)", border: "1px solid rgba(0,0,0,0.06)", borderRadius: "12px", boxShadow: "0 4px 16px rgba(0,0,0,0.08)" }} />
           <Legend wrapperStyle={{ fontSize: 12 }} />
           <Bar
             dataKey="밤잠(시간)"
-            fill="#6366f1"
+            fill="#a78bfa"
             stackId="sleep"
             radius={[0, 0, 0, 0]}
           />
