@@ -5,9 +5,13 @@ import type { MonthlyData } from "@/lib/parser";
 import MonthSelector from "./MonthSelector";
 import StatCard from "./StatCard";
 import DailySummaryChart from "./DailySummaryChart";
+import FeedingIntervalChart from "./FeedingIntervalChart";
+import AvgFeedingDurationChart from "./AvgFeedingDurationChart";
+import DayNightChart from "./DayNightChart";
+import FeedingHeatmap from "./FeedingHeatmap";
+import FeedingBreakdown from "./FeedingBreakdown";
 import SleepChart from "./SleepChart";
 import DiaperChart from "./DiaperChart";
-import FeedingBreakdown from "./FeedingBreakdown";
 
 interface Props {
   allData: MonthlyData[];
@@ -110,12 +114,19 @@ export default function Dashboard({ allData }: Props) {
         )}
       </div>
 
-      {/* Charts */}
+      {/* 수유 차트 */}
       <DailySummaryChart data={dailySummaries} />
+      <FeedingIntervalChart data={dailySummaries} />
+      <AvgFeedingDurationChart data={dailySummaries} />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
-        <SleepChart data={dailySummaries} />
+        <DayNightChart data={dailySummaries} />
+        <FeedingHeatmap data={dailySummaries} />
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
         <FeedingBreakdown data={dailySummaries} />
+        <SleepChart data={dailySummaries} />
       </div>
 
       <DiaperChart data={dailySummaries} />

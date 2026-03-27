@@ -67,6 +67,11 @@ export interface DailySummary {
   diaperCount: number;
   napMinutes: number;
   nightSleepMinutes: number;
+  avgFeedingDuration: number; // 1회 평균 수유 시간 (분)
+  avgFeedingInterval: number; // 평균 수유 간격 (분)
+  dayFeedingCount: number; // 낮 수유 (6~22시)
+  nightFeedingCount: number; // 밤 수유 (22~6시)
+  feedingHours: number[]; // 수유가 발생한 시간대 (0~23)
 }
 
 export interface MonthlyData {
@@ -223,9 +228,24 @@ function buildDailySummaries(activities: Activity[]): DailySummary[] {
       diaperCount: 0,
       napMinutes: 0,
       nightSleepMinutes: 0,
+      avgFeedingDuration: 0,
+      avgFeedingInterval: 0,
+      dayFeedingCount: 0,
+      nightFeedingCount: 0,
+      feedingHours: [],
     };
 
+    const feedingTimes: Date[] = [];
+
     for (const a of acts) {
+      const isFeeding =
+        a.type === "breast_both" ||
+        a.type === "breast_left" ||
+        a.type === "breast_right" ||
+        a.type === "breast_unknown" ||
+        a.type === "formula" ||
+        a.type === "pumped";
+
       if (
         a.type === "breast_both" ||
         a.type === "breast_left" ||
@@ -249,6 +269,33 @@ function buildDailySummaries(activities: Activity[]): DailySummary[] {
       } else if (a.type === "night_sleep") {
         summary.nightSleepMinutes += a.durationMinutes || 0;
       }
+
+      if (isFeeding) {
+        const dt = new Date(a.startTime);
+        feedingTimes.push(dt);
+        const hour = dt.getHours();
+        summary.feedingHours.push(hour);
+        if (hour >= 6 && hour < 22) {
+          summary.dayFeedingCount++;
+        } else {
+          summary.nightFeedingCount++;
+        }
+      }
+    }
+
+    const totalAllFeedings = summary.feedingCount + summary.formulaCount + summary.pumpedCount;
+    summary.avgFeedingDuration =
+      totalAllFeedings > 0
+        ? Math.round(summary.feedingTotalMinutes / summary.feedingCount || 0)
+        : 0;
+
+    feedingTimes.sort((a, b) => a.getTime() - b.getTime());
+    if (feedingTimes.length >= 2) {
+      let totalInterval = 0;
+      for (let i = 1; i < feedingTimes.length; i++) {
+        totalInterval += (feedingTimes[i].getTime() - feedingTimes[i - 1].getTime()) / 60000;
+      }
+      summary.avgFeedingInterval = Math.round(totalInterval / (feedingTimes.length - 1));
     }
 
     summaries.push(summary);
