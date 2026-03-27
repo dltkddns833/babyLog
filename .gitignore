@@ -36,9 +36,8 @@ yarn-error.log*
 # vercel
 .vercel
 
-# baby data (raw exports)
+# baby data (raw zip exports)
 /zip/
-/data/
 
 # typescript
 *.tsbuildinfo
