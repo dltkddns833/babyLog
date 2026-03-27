@@ -1,12 +1,15 @@
 "use client";
 
 import type { DailySummary } from "@/lib/parser";
+import type { Insight } from "@/lib/insights";
+import InsightBox from "./InsightBox";
 
 interface Props {
   data: DailySummary[];
+  insights?: Insight[];
 }
 
-export default function FeedingHeatmap({ data }: Props) {
+export default function FeedingHeatmap({ data, insights }: Props) {
   const hourCounts = new Array(24).fill(0);
   for (const d of data) {
     for (const h of d.feedingHours) {
@@ -60,6 +63,7 @@ export default function FeedingHeatmap({ data }: Props) {
           );
         })}
       </div>
+      {insights && <InsightBox insights={insights} />}
     </div>
   );
 }

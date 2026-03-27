@@ -9,14 +9,17 @@ import {
   Legend,
 } from "recharts";
 import type { DailySummary } from "@/lib/parser";
+import type { Insight } from "@/lib/insights";
+import InsightBox from "./InsightBox";
 
 interface Props {
   data: DailySummary[];
+  insights?: Insight[];
 }
 
 const COLORS = ["#818cf8", "#f472b6"];
 
-export default function FeedingBreakdown({ data }: Props) {
+export default function FeedingBreakdown({ data, insights }: Props) {
   const totalLeft = data.reduce((s, d) => s + d.leftMinutes, 0);
   const totalRight = data.reduce((s, d) => s + d.rightMinutes, 0);
 
@@ -64,6 +67,7 @@ export default function FeedingBreakdown({ data }: Props) {
       <p className="text-center text-xs sm:text-sm text-gray-500 mt-1 sm:mt-2">
         왼쪽 {leftPct}% / 오른쪽 {rightPct}%
       </p>
+      {insights && <InsightBox insights={insights} />}
     </div>
   );
 }

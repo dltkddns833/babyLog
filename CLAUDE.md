@@ -39,24 +39,40 @@ BabyTime 앱 내보내기 txt 파일. `====================` 구분자로 레코
 
 ## Dashboard Layout (순서)
 
-1. **통계 카드** — 일평균 수유 횟수/시간, 기저귀, 수면 등 요약
+0. **종합 인사이트** (`MonthlySummary`) — `data/insights.json`에서 월별 전문가 분석 표시
+1. **통계 카드** — 일평균 수유 횟수/시간, 기저귀, 수면 등 요약 + 자동 생성 인사이트
 2. **일별 수유 요약** (`FeedingTable`) — 테이블 + 행 클릭 시 디테일 펼침 (개별 활동 시간/종류/메모 표시)
-3. **일별 수유 횟수** (`DailySummaryChart`) — 라인 차트
-4. **수유 간격 추이** (`FeedingIntervalChart`) — 라인 차트, 평균 기준선 포함
-5. **1회 평균 수유 시간** (`AvgFeedingDurationChart`) — 라인 차트, 평균 기준선 포함
-6. **시간대 수유 빈도** (`FeedingHeatmap`) + **좌/우 비율** (`FeedingBreakdown`) — 2열 그리드
-7. **수면 패턴** (`SleepChart`) — 밤잠/낮잠 스택 바 차트
-8. **기저귀** (`DiaperChart`) — 일별 교체 횟수 바 차트
+3. **일별 수유 횟수** (`DailySummaryChart`) — 라인 차트 + 인사이트
+4. **수유 간격 추이** (`FeedingIntervalChart`) — 라인 차트, 평균 기준선 포함 + 인사이트
+5. **1회 평균 수유 시간** (`AvgFeedingDurationChart`) — 라인 차트, 평균 기준선 포함 + 인사이트
+6. **시간대 수유 빈도** (`FeedingHeatmap`) + **좌/우 비율** (`FeedingBreakdown`) — 2열 그리드 + 인사이트
+7. **수면 패턴** (`SleepChart`) — 밤잠/낮잠 스택 바 차트 + 인사이트
+8. **기저귀** (`DiaperChart`) — 일별 교체 횟수 바 차트 + 인사이트
 
 기타:
 - `StatCard` — 요약 통계 카드
 - `MonthSelector` — 좌/우 화살표 + 드롭다운 셀렉트 (월 수 증가에 대응)
+- `InsightBox` — 인사이트 표시 컴포넌트 (positive/neutral/watch 3단계)
+
+## Insight System
+
+인사이트는 2단계로 구성:
+
+1. **종합 인사이트** (`data/insights.json`) — Claude가 수유 분석 전문가로서 실제 데이터와 메모를 정밀 분석하여 직접 작성. 이 프로젝트에서 가장 핵심적인 가치를 제공하는 부분이다. 반드시 포함해야 할 요소:
+   - WHO 기준, 발달 단계별 의학적 근거를 바탕으로 한 평가
+   - 긍정적 변화뿐 아니라 개선사항, 주의사항, 엄마 건강 관련 경고
+   - 메모에서 추출한 행동 패턴 분석 (보채는 원인, 수면 습관 등)
+   - 구체적인 액션 아이템 (어떻게 개선할지 단계별 안내)
+   - 월간 변화 비교 및 다음 달 전망/대비 사항
+   - 새 달 데이터 추가 시 Claude에게 분석 요청하여 업데이트
+2. **차트별 인사이트** (`src/lib/insights.ts`) — 로직 기반 자동 생성. 권장 수치 대비 평가, 추이 분석, 이상 패턴 감지.
 
 ## Adding New Month Data
 
 1. zip 파일을 `zip/` 폴더에 추가
 2. `data/{YYYYMM}/` 폴더에 압축 해제
-3. `pnpm build`로 재빌드 (parser가 자동으로 새 월 탐지)
+3. Claude에게 해당 월 종합 인사이트 분석 요청 → `data/insights.json` 업데이트
+4. `pnpm build`로 재빌드 (parser가 자동으로 새 월 탐지)
 
 ## Design Decisions
 
@@ -69,6 +85,7 @@ BabyTime 앱 내보내기 txt 파일. `====================` 구분자로 레코
 
 ## 작업 규칙
 
+- **Claude는 이 프로젝트의 작업자이자 수유 분석 전문가이다.** 개발뿐 아니라 수유 데이터 해석, 패턴 분석, 육아 관점의 인사이트도 함께 제공한다.
 - **빌드(`pnpm build`) 및 git push는 사용자가 명시적으로 요청할 때만 실행한다.** 코드 변경 후 자동으로 빌드/push하지 않는다. 사용자가 dev 서버에서 검토를 완료한 뒤 직접 "빌드해줘", "푸쉬해줘" 등으로 요청해야만 수행한다.
 
 ## Deployment

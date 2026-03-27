@@ -10,12 +10,15 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import type { DailySummary } from "@/lib/parser";
+import type { Insight } from "@/lib/insights";
+import InsightBox from "./InsightBox";
 
 interface Props {
   data: DailySummary[];
+  insights?: Insight[];
 }
 
-export default function DailySummaryChart({ data }: Props) {
+export default function DailySummaryChart({ data, insights }: Props) {
   const chartData = data.map((d) => ({
     date: d.date.substring(5),
     "수유 횟수": d.feedingCount + d.formulaCount + d.pumpedCount,
@@ -42,6 +45,7 @@ export default function DailySummaryChart({ data }: Props) {
           />
         </LineChart>
       </ResponsiveContainer>
+      {insights && <InsightBox insights={insights} />}
     </div>
   );
 }

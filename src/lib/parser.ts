@@ -90,6 +90,17 @@ export interface NotableEvent {
   content: string;
 }
 
+export interface MonthlyInsightDetail {
+  type: "positive" | "neutral" | "watch";
+  text: string;
+}
+
+export interface MonthlyInsight {
+  title: string;
+  summary: string;
+  details: MonthlyInsightDetail[];
+}
+
 export interface MonthlyData {
   month: string; // YYYYMM
   label: string; // e.g. "2026년 2월"
@@ -97,6 +108,7 @@ export interface MonthlyData {
   dailySummaries: DailySummary[];
   bottleRecords: BottleRecord[];
   notableEvents: NotableEvent[];
+  insight?: MonthlyInsight;
 }
 
 // --- Parsing ---
@@ -355,6 +367,13 @@ export function loadAllData(): MonthlyData[] {
     .filter((d) => /^\d{6}$/.test(d))
     .sort();
 
+  // 종합 인사이트 로드
+  const insightsPath = path.join(dataDir, "insights.json");
+  let insightsMap: Record<string, MonthlyInsight> = {};
+  if (fs.existsSync(insightsPath)) {
+    insightsMap = JSON.parse(fs.readFileSync(insightsPath, "utf-8"));
+  }
+
   const result: MonthlyData[] = [];
 
   for (const month of months) {
@@ -425,6 +444,7 @@ export function loadAllData(): MonthlyData[] {
       dailySummaries: buildDailySummaries(activities),
       bottleRecords,
       notableEvents,
+      insight: insightsMap[month],
     });
   }
 

@@ -11,12 +11,15 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import type { DailySummary } from "@/lib/parser";
+import type { Insight } from "@/lib/insights";
+import InsightBox from "./InsightBox";
 
 interface Props {
   data: DailySummary[];
+  insights?: Insight[];
 }
 
-export default function SleepChart({ data }: Props) {
+export default function SleepChart({ data, insights }: Props) {
   const chartData = data
     .filter((d) => d.napMinutes > 0 || d.nightSleepMinutes > 0)
     .map((d) => ({
@@ -60,6 +63,7 @@ export default function SleepChart({ data }: Props) {
           />
         </BarChart>
       </ResponsiveContainer>
+      {insights && <InsightBox insights={insights} />}
     </div>
   );
 }
