@@ -35,4 +35,4 @@ pnpm dev
 
 ## 배포
 
-Vercel 정적 배포 (`output: "export"`)
+Vercel 배포 (GitHub 연결 시 자동 빌드/배포)

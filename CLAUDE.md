@@ -16,7 +16,7 @@ BabyTime 앱에서 내보낸 아기(성찬) 활동 데이터를 시각화하는 
 - Tailwind CSS 4
 - Recharts (차트)
 - pnpm (패키지 매니저)
-- Vercel 정적 배포 (`output: "export"`)
+- Vercel 배포
 
 ## Commands
 
@@ -73,5 +73,5 @@ BabyTime 앱 내보내기 txt 파일. `====================` 구분자로 레코
 
 ## Deployment
 
-Vercel 정적 배포. `zip/`만 `.gitignore`에 포함. `data/`는 git에 포함되어 Vercel 빌드 시 사용 가능.
+Vercel 배포 (GitHub 연결 시 자동 빌드). `zip/`만 `.gitignore`에 포함. `data/`는 git에 포함되어 Vercel 빌드 시 사용 가능.
 GitHub: https://github.com/dltkddns833/babyLog
