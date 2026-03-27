@@ -86,6 +86,7 @@ BabyTime 앱 내보내기 txt 파일. `====================` 구분자로 레코
 - **애니메이션**: 스크롤 fade-in-up (`AnimatedSection`), StatCard pop-in stagger, 헤더 slide-in + 아이콘 float, 테이블 행 expand, 히트맵 바 grow, 섹션 타이틀 shimmer
 - **이스터에그**: 헤더 성찬이 사진 클릭 시 화면 전체에 하트 burst (`HeartEasterEgg`, `createPortal` 사용)
 - **앱 아이콘**: `src/app/icon.tsx` (동적 생성, 글라스 + 아기 얼굴), `public/baby.jpg` (헤더 프로필)
+- **OG Image**: `src/app/opengraph-image.tsx` (SNS/카카오톡 공유 썸네일, 성찬이 사진 + 로고 + 태그)
 
 ### 기존 Design Decisions
 
@@ -105,4 +106,5 @@ BabyTime 앱 내보내기 txt 파일. `====================` 구분자로 레코
 ## Deployment
 
 Vercel 배포 (GitHub 연결 시 자동 빌드). `zip/`만 `.gitignore`에 포함. `data/`는 git에 포함되어 Vercel 빌드 시 사용 가능.
-GitHub: https://github.com/dltkddns833/babyLog
+- **URL**: https://baby-log-xi.vercel.app
+- **GitHub**: https://github.com/dltkddns833/babyLog
