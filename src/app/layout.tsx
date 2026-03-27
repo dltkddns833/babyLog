@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://baby-log-xi.vercel.app"),
-  title: "찬찬기록 - 성찬이 육아 대시보드",
+  title: "찬찬기록",
   description: "성찬이의 수유·수면·기저귀 기록을 한눈에. 찬찬히 기록하고, 찬찬히 성장하는 우리 아기.",
   openGraph: {
     title: "찬찬기록",
