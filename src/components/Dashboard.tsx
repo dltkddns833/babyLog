@@ -25,6 +25,7 @@ import SleepChart from "./SleepChart";
 import DiaperChart from "./DiaperChart";
 import FeedingTable from "./FeedingTable";
 import MonthlySummary from "./MonthlySummary";
+import HospitalVisits from "./HospitalVisits";
 
 interface Props {
   allData: MonthlyData[];
@@ -190,6 +191,13 @@ export default function Dashboard({ allData }: Props) {
       <AnimatedSection>
         <DiaperChart data={dailySummaries} insights={analyzeDiaper(dailySummaries)} />
       </AnimatedSection>
+
+      {/* 9. 병원 방문 */}
+      {current.hospitalRecords.length > 0 && (
+        <AnimatedSection>
+          <HospitalVisits records={current.hospitalRecords} />
+        </AnimatedSection>
+      )}
     </div>
   );
 }

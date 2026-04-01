@@ -12,7 +12,9 @@ export type ActivityType =
   | "pumped"
   | "diaper"
   | "night_sleep"
-  | "nap";
+  | "nap"
+  | "hospital"
+  | "bath";
 
 export interface BaseActivity {
   type: ActivityType;
@@ -47,12 +49,25 @@ export interface SleepActivity extends BaseActivity {
   type: "night_sleep" | "nap";
 }
 
+export interface HospitalActivity extends BaseActivity {
+  type: "hospital";
+  visitType: string;
+  hospitalName: string;
+  reason: string;
+}
+
+export interface BathActivity extends BaseActivity {
+  type: "bath";
+}
+
 export type Activity =
   | BreastFeedingActivity
   | FormulaActivity
   | PumpedActivity
   | DiaperActivity
-  | SleepActivity;
+  | SleepActivity
+  | HospitalActivity
+  | BathActivity;
 
 export interface DailySummary {
   date: string; // YYYY-MM-DD
@@ -101,6 +116,15 @@ export interface MonthlyInsight {
   details: MonthlyInsightDetail[];
 }
 
+export interface HospitalRecord {
+  date: string;
+  time: string;
+  visitType: string;
+  hospitalName: string;
+  reason: string;
+  memo?: string;
+}
+
 export interface MonthlyData {
   month: string; // YYYYMM
   label: string; // e.g. "2026년 2월"
@@ -108,6 +132,7 @@ export interface MonthlyData {
   dailySummaries: DailySummary[];
   bottleRecords: BottleRecord[];
   notableEvents: NotableEvent[];
+  hospitalRecords: HospitalRecord[];
   insight?: MonthlyInsight;
 }
 
@@ -139,6 +164,8 @@ function parseActivityType(typeStr: string): ActivityType {
   if (t === "기저귀") return "diaper";
   if (t === "밤잠") return "night_sleep";
   if (t === "낮잠") return "nap";
+  if (t === "병원") return "hospital";
+  if (t === "목욕") return "bath";
   return "breast_unknown";
 }
 
@@ -225,6 +252,20 @@ function parseRecord(block: string): Activity | null {
 
   if (activityType === "night_sleep" || activityType === "nap") {
     return { ...base, type: activityType };
+  }
+
+  if (activityType === "hospital") {
+    return {
+      ...base,
+      type: "hospital",
+      visitType: props["방문유형"] || "",
+      hospitalName: props["병원명"] || "",
+      reason: props["방문사유"] || "",
+    };
+  }
+
+  if (activityType === "bath") {
+    return { ...base, type: "bath" };
   }
 
   return null;
@@ -422,6 +463,16 @@ export function loadAllData(): MonthlyData[] {
     };
 
     for (const a of activities) {
+      // 목욕은 특이사항 이벤트로 추가
+      if (a.type === "bath") {
+        notableEvents.push({
+          date: getDateFromISO(a.startTime),
+          category: "목욕",
+          content: `목욕 ${a.durationMinutes ? `${a.durationMinutes}분` : ""}${a.memo ? ` - ${a.memo}` : ""}`,
+        });
+        continue;
+      }
+
       if (!a.memo) continue;
       let category = "기타";
       for (const [keyword, cat] of Object.entries(memoKeywords)) {
@@ -437,6 +488,18 @@ export function loadAllData(): MonthlyData[] {
       });
     }
 
+    // 병원 방문 레코드 수집
+    const hospitalRecords: HospitalRecord[] = activities
+      .filter((a): a is HospitalActivity => a.type === "hospital")
+      .map((a) => ({
+        date: getDateFromISO(a.startTime),
+        time: a.startTime.substring(11, 16),
+        visitType: a.visitType,
+        hospitalName: a.hospitalName,
+        reason: a.reason,
+        memo: a.memo,
+      }));
+
     result.push({
       month,
       label,
@@ -444,6 +507,7 @@ export function loadAllData(): MonthlyData[] {
       dailySummaries: buildDailySummaries(activities),
       bottleRecords,
       notableEvents,
+      hospitalRecords,
       insight: insightsMap[month],
     });
   }

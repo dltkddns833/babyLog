@@ -43,6 +43,8 @@ function getActivityLabel(type: string): string {
     diaper: "기저귀",
     night_sleep: "밤잠",
     nap: "낮잠",
+    hospital: "병원",
+    bath: "목욕",
   };
   return map[type] || type;
 }
@@ -53,6 +55,8 @@ function getActivityColor(type: string): string {
   if (type === "pumped") return "text-sky-600";
   if (type === "diaper") return "text-yellow-600";
   if (type === "night_sleep" || type === "nap") return "text-indigo-500";
+  if (type === "hospital") return "text-sky-600";
+  if (type === "bath") return "text-cyan-600";
   return "text-gray-600";
 }
 
@@ -72,6 +76,13 @@ function getActivityDetail(a: Activity): string {
   if (a.type === "formula") return `${a.amountMl}ml`;
   if (a.type === "pumped") return `${a.amountMl}ml`;
   if (a.type === "diaper") return a.stoolType;
+  if (a.type === "hospital") {
+    const parts: string[] = [];
+    if (a.hospitalName) parts.push(a.hospitalName);
+    if (a.reason) parts.push(a.reason);
+    return parts.join(" · ");
+  }
+  if (a.type === "bath") return a.durationMinutes ? `${a.durationMinutes}분` : "";
   if (a.durationMinutes) {
     const h = Math.floor(a.durationMinutes / 60);
     const m = a.durationMinutes % 60;
