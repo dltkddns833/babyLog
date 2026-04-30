@@ -386,6 +386,15 @@ function buildDailySummaries(activities: Activity[]): DailySummary[] {
   return summaries;
 }
 
+function isPartialLastDay(activities: Activity[], summaries: DailySummary[]): boolean {
+  if (summaries.length === 0) return false;
+  const lastDate = summaries[summaries.length - 1].date;
+  const lastDayActs = activities.filter(
+    (a) => getDateFromISO(a.startTime) === lastDate
+  );
+  return !lastDayActs.some((a) => new Date(a.startTime).getHours() >= 19);
+}
+
 function parseFile(filePath: string): Activity[] {
   const content = fs.readFileSync(filePath, "utf-8");
   const blocks = content.split("====================");
@@ -416,6 +425,7 @@ export function loadAllData(): MonthlyData[] {
   }
 
   const result: MonthlyData[] = [];
+  const latestMonth = months[months.length - 1];
 
   for (const month of months) {
     const monthDir = path.join(dataDir, month);
@@ -500,11 +510,16 @@ export function loadAllData(): MonthlyData[] {
         memo: a.memo,
       }));
 
+    let dailySummaries = buildDailySummaries(activities);
+    if (month === latestMonth && isPartialLastDay(activities, dailySummaries)) {
+      dailySummaries = dailySummaries.slice(0, -1);
+    }
+
     result.push({
       month,
       label,
       activities,
-      dailySummaries: buildDailySummaries(activities),
+      dailySummaries,
       bottleRecords,
       notableEvents,
       hospitalRecords,
