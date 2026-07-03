@@ -75,6 +75,7 @@ BabyTime 앱 내보내기 txt 파일. `====================` 구분자로 레코
 2. `data/{YYYYMM}/` 폴더에 압축 해제
 3. Claude에게 해당 월 종합 인사이트 분석 요청 → `data/insights.json` 업데이트
 4. `pnpm build`로 재빌드 (parser가 자동으로 새 월 탐지)
+5. 위키에 월별 기록 노트 등록 → `/Users/isang-un/Desktop/personal/wiki/content/육아/성찬-YYYYMM-월별기록.md` 생성 + `index.md` 육아 섹션에 링크 추가 (노트 양식: [[성찬-202605-월별기록]] 참고)
 
 ## Design System
 
